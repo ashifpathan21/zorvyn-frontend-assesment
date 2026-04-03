@@ -24,21 +24,39 @@ const Transactions = () => {
   const { monthlyBalance, monthlyTrend, categoryTotals } =
     insights(transactions);
   const dispatch = useAppDispatch();
-
+  const [sortBy, setSortBy] = useState<"date" | "amount">("date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedType, setSelectedType] = useState("All");
 
-  const filteredTransactions = transactions.filter((transaction) => {
-    const matchesSearch = transaction.description
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "All" || transaction.category === selectedCategory;
-    const matchesType =
-      selectedType === "All" || transaction.type === selectedType;
-    return matchesSearch && matchesCategory && matchesType;
-  });
+  const filteredTransactions = transactions
+    .filter((transaction) => {
+      const matchesSearch = transaction.description
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      const matchesCategory =
+        selectedCategory === "All" || transaction.category === selectedCategory;
+
+      const matchesType =
+        selectedType === "All" || transaction.type === selectedType;
+
+      return matchesSearch && matchesCategory && matchesType;
+    })
+    .sort((a, b) => {
+      if (sortBy === "date") {
+        const diff = new Date(a.date).getTime() - new Date(b.date).getTime();
+        return sortOrder === "asc" ? diff : -diff;
+      }
+
+      if (sortBy === "amount") {
+        const diff = a.amount - b.amount;
+        return sortOrder === "asc" ? diff : -diff;
+      }
+
+      return 0;
+    });
   return (
     <main className="space-y-4 ">
       <section className="flex justify-between items-center w-full">
@@ -60,8 +78,8 @@ const Transactions = () => {
         )}
       </section>
       <section className="flex flex-col md:flex-row lg:flex-row items-start w-full gap-3 ">
-        <section className="bg-primary-500 flex-1 p-4 rounded-xl py-6 flex items-center gap-3 ">
-          <div className="flex flex-col gap-2 text-neutral-100 p-2 ">
+        <section className="flex p-4 rounded-xl py-6 bg-primary-500  flex-col items-start gap-2">
+          <div className="flex w-full  flex-col gap-2 text-neutral-100 p-2 ">
             <label htmlFor="">Search Records</label>
             <Input
               type="text"
@@ -72,37 +90,63 @@ const Transactions = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div className="flex flex-col gap-2 text-neutral-100 p-2 ">
-            <label htmlFor="category">Category</label>
-            <select
-              className="bg-neutral-100 text-primary-800 p-2 px-4  rounded-xl "
-              name="category"
-              id="category"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
-              <option value="All">All</option>
-              {Object.keys(categoryTotals).map((key) => (
-                <option key={key} value={key}>
-                  {key}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-col gap-2 text-neutral-100 p-2 ">
-            <label htmlFor="type">Type</label>
-            <select
-              className="bg-neutral-100 text-primary-800 p-2 px-4 rounded-xl "
-              name="type"
-              id="type"
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-            >
-              <option value="All">All</option>
-              <option value="income">Income</option>
-              <option value="expense">Expense</option>
-            </select>
-          </div>
+
+          <section className="flex-1  flex  items-center gap-3 ">
+            <div className="flex flex-col gap-2 text-neutral-100 p-2 ">
+              <label htmlFor="category">Category</label>
+              <select
+                className="bg-neutral-100 text-primary-800 p-2 px-4  rounded-xl "
+                name="category"
+                id="category"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="All">All</option>
+                {Object.keys(categoryTotals).map((key) => (
+                  <option key={key} value={key}>
+                    {key}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col gap-2 text-neutral-100 p-2 ">
+              <label htmlFor="type">Type</label>
+              <select
+                className="bg-neutral-100 text-primary-800 p-2 px-4 rounded-xl "
+                name="type"
+                id="type"
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+              >
+                <option value="All">All</option>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+              </select>
+            </div>
+            <div className="flex flex-col gap-2 text-neutral-100 p-2 ">
+              <label>Sort By</label>
+              <select
+                className="bg-neutral-100 text-primary-800 p-2 px-4 rounded-xl"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as "date" | "amount")}
+              >
+                <option value="date">Date</option>
+                <option value="amount">Amount</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-2 text-neutral-100 p-2 ">
+              <label>Order</label>
+              <select
+                className="bg-neutral-100 text-primary-800 p-2 px-4 rounded-xl"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+              >
+                <option value="desc">Descending</option>
+                <option value="asc">Ascending</option>
+              </select>
+            </div>
+          </section>
         </section>
         <StatCard
           icon={<RiMoneyRupeeCircleFill className="h-5 w-5" />}
