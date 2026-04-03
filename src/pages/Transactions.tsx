@@ -58,7 +58,7 @@ const Transactions = () => {
       return 0;
     });
   return (
-    <main className="space-y-4 ">
+    <main className="space-y-4 bg-neutral-100">
       <section className="flex justify-between items-center w-full">
         <Heading
           heading="Transactions"
@@ -77,7 +77,7 @@ const Transactions = () => {
           />
         )}
       </section>
-      <section className="flex flex-col md:flex-row lg:flex-row items-start w-full gap-3 ">
+      <section className="flex flex-col md:flex-row overflow-hidden lg:flex-row items-start w-full gap-3 ">
         <section className="flex p-4 rounded-xl py-6 bg-primary-500  flex-col items-start gap-2">
           <div className="flex w-full  flex-col gap-2 text-neutral-100 p-2 ">
             <label htmlFor="">Search Records</label>
@@ -174,7 +174,7 @@ const Transactions = () => {
         />
       </div>
       <section>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto bg-neutral-100 min-h-screen">
           <table className="min-w-full border-collapse ">
             <thead className="bg-primary-100">
               <tr>

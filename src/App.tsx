@@ -26,7 +26,7 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-100 text-neutral-900">
+    <div className="min-h-screen w-full  bg-neutral-100 text-neutral-900">
       <div className="mx-auto flex min-h-screen max-w-425">
         <aside className="hidden w-75 shrink-0 flex-col border-r border-neutral-200 bg-neutral-50 p-6 lg:flex">
           <div className="mb-8">
@@ -57,7 +57,7 @@ const App = () => {
           </nav>
         </aside>
 
-        <div className="flex flex-1 flex-col">
+        <div className="flex flex-1 flex-col bg-neutral-100">
           <Navbar />
           <div className="flex items-center justify-between gap-2 border-b border-neutral-200 bg-neutral-50 p-3 lg:hidden">
             {sections.map((section, index) => (
@@ -78,7 +78,7 @@ const App = () => {
               </button>
             ))}
           </div>
-          <div className="flex-1 p-4 md:p-6 lg:px-8 relative">
+          <div className="flex-1 p-4 min-h-screen  h-full bg-neutral-100  md:p-6 lg:px-8 relative">
             {tabs[activeTab]}
             <Modal />
           </div>

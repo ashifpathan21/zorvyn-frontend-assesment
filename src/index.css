@@ -18,6 +18,9 @@
   }
 }
 
+/* html{
+  background-color: var(--neutral-100);
+} */
 
 @layer utilities {
   .font-mono-ui {
