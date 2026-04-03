@@ -15,6 +15,8 @@
     "@syncfusion/ej2-base": "^33.1.45",
     "@syncfusion/ej2-react-charts": "^33.1.44",
     "@tailwindcss/vite": "^4.2.2",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.7",
     "lucide-react": "^1.7.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

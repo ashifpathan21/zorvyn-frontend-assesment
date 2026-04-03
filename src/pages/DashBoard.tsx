@@ -10,6 +10,7 @@ import {
   RiArrowDownSLine,
 } from "@remixicon/react";
 import TransactionCard from "../components/TransactionCard";
+import { exportToCSV, exportToPDF } from "../store/utils/export";
 
 export interface IData {
   date: string;
@@ -175,15 +176,21 @@ const DashBoard = ({
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex justify-between flex-wrap items-center gap-3">
           <Button
             onClick={() => {
-              print();
+              exportToCSV(transactions);
             }}
             type="secondary"
+            text="Download CSV"
+          />
+          <Button
+            onClick={() => {
+              exportToPDF(transactions);
+            }}
+            type="primary"
             text="Download PDF"
           />
-          <Button onClick={() => {}} type="primary" text="Manage Assets" />
         </div>
       </section>
 

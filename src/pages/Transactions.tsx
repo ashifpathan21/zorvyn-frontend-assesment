@@ -16,6 +16,7 @@ import {
   setRecentTransaction,
   toggleModal,
 } from "../store/slices/pageSlice";
+import { exportToCSV, exportToPDF } from "../store/utils/export";
 
 const Transactions = () => {
   const role = useAppSelector((state) => state.user.role);
@@ -112,27 +113,32 @@ const Transactions = () => {
           trend={monthlyTrend}
         />
       </section>
-
+      <div className="flex  flex-wrap items-center gap-3">
+        <Button
+          onClick={() => {
+            exportToCSV(filteredTransactions);
+          }}
+          type="secondary"
+          text="Download CSV"
+        />
+        <Button
+          onClick={() => {
+            exportToPDF(filteredTransactions);
+          }}
+          type="primary"
+          text="Download PDF"
+        />
+      </div>
       <section>
         <div className="overflow-x-auto">
-          <table className="min-w-full border-collapse border border-primary-400">
+          <table className="min-w-full border-collapse ">
             <thead className="bg-primary-100">
               <tr>
-                <th className="px-4 py-2 border border-primary-300 text-left">
-                  Date
-                </th>
-                <th className="px-4 py-2 border border-primary-300 text-left">
-                  Description
-                </th>
-                <th className="px-4 py-2 border border-primary-300 text-left">
-                  Category
-                </th>
-                <th className="px-4 py-2 border border-primary-300 text-left">
-                  Type
-                </th>
-                <th className="px-4 py-2 border border-primary-300 text-right">
-                  Amount
-                </th>
+                <th className="px-4 py-2  text-left">Date</th>
+                <th className="px-4 py-2  text-left">Description</th>
+                <th className="px-4 py-2  text-left">Category</th>
+                <th className="px-4 py-2  text-left">Type</th>
+                <th className="px-4 py-2  text-right">Amount</th>
                 {role === "admin" && <th>Actions</th>}
               </tr>
             </thead>
@@ -142,18 +148,14 @@ const Transactions = () => {
                   key={transaction.id}
                   className="odd:bg-neutral-100 even:bg-primary-100 "
                 >
-                  <td className="px-4 py-2 border border-primary-300">
+                  <td className="px-4 py-2 ">
                     {transaction.date.toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-2 border border-primary-300">
-                    {transaction.description}
-                  </td>
-                  <td className="px-4 py-2 border border-primary-300">
-                    {transaction.category}
-                  </td>
+                  <td className="px-4 py-2 ">{transaction.description}</td>
+                  <td className="px-4 py-2 ">{transaction.category}</td>
                   <td
                     className={
-                      "px-4 py-2 border border-primary-300 " +
+                      "px-4 py-2  " +
                       ` ${transaction.type === "income" ? "text-green-600" : "text-red-600"}`
                     }
                   >
@@ -161,7 +163,7 @@ const Transactions = () => {
                   </td>
                   <td
                     className={
-                      "px-4 py-2 border border-primary-300 text-right" +
+                      "px-4 py-2  text-right" +
                       ` ${transaction.type === "income" ? "text-green-600" : "text-red-600"}`
                     }
                   >
@@ -169,7 +171,7 @@ const Transactions = () => {
                     {formatMoney(transaction.amount)}
                   </td>
                   {role === "admin" && (
-                    <td className="px-4 py-2 flex gap-3 items-center justify-center  border border-primary-300">
+                    <td className="px-4 py-2 flex gap-3 items-center justify-center  ">
                       <button
                         onClick={() => {
                           dispatch(setMode("edit"));

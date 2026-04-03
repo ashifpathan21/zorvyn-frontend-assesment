@@ -25,7 +25,7 @@ const Modal = () => {
   const transactions = useAppSelector((state) => state.user.transactions);
   const [query, setQuery] = useState("");
   const [form, setForm] = useState(defaultForm);
-
+  const today = new Date().toISOString().split("T")[0];
   useEffect(() => {
     if (mode === "edit" && recentTransaction) {
       setForm({
@@ -210,9 +210,11 @@ const Modal = () => {
                   required
                   type="date"
                   value={form.date}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, date: e.target.value }))
-                  }
+                  onChange={(e) => {
+                    if (e.target.value <= today)
+                      setForm((prev) => ({ ...prev, date: e.target.value }));
+                  }}
+                  max={today}
                   className="w-full rounded-xl border border-neutral-200 px-3 py-2"
                 />
               </label>
